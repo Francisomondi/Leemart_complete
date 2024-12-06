@@ -10,14 +10,14 @@ const callbackHandler = require('./controller/payments/callbackHandler');
 const app = express();
 
 // Middleware to enable CORS
-
-
 app.use(cors({
-    origin: 'https://leemart-complete-sbjy.vercel.app', // Allow specific origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-    credentials: true, // Include credentials if needed
+    origin: process.env.FRONTEND_URL,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true
 }));
-  
+
+
+
 
 
 
