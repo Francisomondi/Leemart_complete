@@ -1,46 +1,38 @@
 const express = require('express');
 const cors = require('cors');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const connectDb = require('./config/db');
 const router = require('./routes');
 const callbackHandler = require('./controller/payments/callbackHandler');
 
-
 const app = express();
 
-// Middleware to enable CORS
-{/**
-    app.use(cors({
-    origin: process.env.FRONTEND_URL,
+// Allowed origins
+const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:3000'];
+
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'OPTIONS'],
     credentials: true
-    }));
-**/}
+}));
 
-// Allow requests from your frontend domain
-const corsOptions = {
-    origin: 'https://leemart-complete-b23v.vercel.app', // Replace with your frontend URL
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
-    credentials: true, // Allow cookies or other credentials
-  };
-  
-  app.use(cors(corsOptions));
+// Handle preflight requests
+app.options('*', cors());
 
-app.options('*', cors(corsOptions));
-
-
-
-
-app.use(cookieParser())
-
-// Middleware to parse JSON request bodies
+// Middlewares
+app.use(cookieParser());
 app.use(express.json());
 
-// Router
+// Routes
 app.use('/api', router);
-app.post('/callback', callbackHandler); 
-
+app.post('/callback', callbackHandler);
 
 // Define the port
 const PORT = process.env.PORT || 8000;
