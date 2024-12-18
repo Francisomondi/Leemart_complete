@@ -109,7 +109,7 @@ const ProductCategory = () => {
                   <form className='text-sm flex flex-col gap-2 py-2'>
                     <div className='flex items-center gap-3'>
                       <input type='radio' name='sortBy' checked ={sortBy === 'asc'} value={'asc'} onChange={handleSortByOnChange}/>
-                      <label>Price - Low to High</label>
+                      <label>Price - Lowest to Highest</label>
                     </div>
 
                     <div className='flex items-center gap-3'>
